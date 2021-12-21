@@ -1,7 +1,8 @@
-using System;
 using Xunit;
+using EvenOrOdd;
 
-namespace EvenOrOdd_TDD
+
+namespace EvenOrOdd.Test
 {
     public partial class EvaluatorTest
     {

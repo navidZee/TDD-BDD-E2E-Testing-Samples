@@ -1,8 +1,8 @@
-﻿using Xunit;
+using Xunit;
 
 namespace FizzBuzz
 {
-    public class FizzBuzzTests
+    public class FizzBuzzTest
     {
         [Fact]
         public void Start_ShouldReturnAListWithGivenRoundsLength()
