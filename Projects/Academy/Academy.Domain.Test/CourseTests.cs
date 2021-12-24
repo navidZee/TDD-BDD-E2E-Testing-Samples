@@ -1,5 +1,6 @@
 using System;
 using Academy.Domain;
+using FluentAssertions;
 using Xunit;
 
 namespace Academy.Domain.Test
@@ -16,10 +17,10 @@ namespace Academy.Domain.Test
 
             Course course = new Course(id, name, isOnline, tuition);
 
-            Assert.Equal(id, course.Id);
-            Assert.Equal(name, course.Name);
-            Assert.Equal(isOnline, course.IsOnline);
-            Assert.Equal(tuition, course.Tuition);
+            course.Id.Should().Be(id);
+            course.Name.Should().Be(name);
+            course.IsOnline.Should().Be(isOnline);
+            course.Tuition.Should().Be(tuition);
         }
 
         [Theory]
@@ -27,9 +28,9 @@ namespace Academy.Domain.Test
         [InlineData(1, "TDD & BDD", true, 0)]
         public void Constructor_ShouldThrowException(int id, string name, bool isOnline, double tuition)
         {
-            void Course() => new Course(id, name, isOnline, tuition);
+            Action course = () => new Course(id, name, isOnline, tuition);
 
-            Assert.Throws<Exception>(Course);
+            course.Should().Throw<Exception>();
         }
     }
 }
