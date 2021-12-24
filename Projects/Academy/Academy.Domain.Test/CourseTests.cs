@@ -14,7 +14,7 @@ namespace Academy.Domain.Test
             const string name = "TDD & BDD";
             const bool isOnline = true;
             const double tuition = 600;
-            const string instructor = "Navid";
+            const string instructor = "Navid Zare";
 
             Course course = new Course(id, name, isOnline, tuition, instructor);
 
@@ -25,16 +25,24 @@ namespace Academy.Domain.Test
             course.Instructor.Should().Be(instructor);
         }
 
-        [Theory]
-        [InlineData("", 600)]
-        [InlineData("TDD & BDD", 0)]
-        public void Constructor_ShouldThrowException(string name, double tuition)
+        [Fact]
+        public void Constructor_ShouldThrowException_When_NameIsNotProvided()
         {
             var courseBuilder = new CourseTestBuilder();
 
-            Action course = () => courseBuilder.WithName(name).WithTuition(tuition).Build();
+            Action course = () => courseBuilder.WithName(string.Empty).Build();
 
-            course.Should().Throw<Exception>();
+            course.Should().ThrowExactly<CourseNameIsInvalidException>();
+        }
+
+        [Fact]
+        public void Constructor_ShouldThrowException_When_TuitionIsNotProvided()
+        {
+            var courseBuilder = new CourseTestBuilder();
+
+            Action course = () => courseBuilder.WithTuition(0).Build();
+
+            course.Should().ThrowExactly<CourseTuitionIsInvalidException>();
         }
     }
 }
