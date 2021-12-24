@@ -8,8 +8,9 @@ namespace Academy.Domain
         public string Name { get; set; }
         public bool IsOnline { get; set; }
         public double Tuition { get; set; }
+        public string Instructor { get; set; }
 
-        public Course(int id, string name, bool isOnline, double tuition)
+        public Course(int id, string name, bool isOnline, double tuition,string instructor)
         {
             GuardAgainstInvalidName(name);
             GuardAgainstInvalidTuition(tuition);
@@ -18,6 +19,7 @@ namespace Academy.Domain
             Name = name;
             IsOnline = isOnline;
             Tuition = tuition;
+            Instructor = instructor;
         }
 
         private static void GuardAgainstInvalidName(string name)
