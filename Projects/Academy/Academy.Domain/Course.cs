@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Academy.Domain
 {
@@ -9,6 +10,7 @@ namespace Academy.Domain
         public bool IsOnline { get; set; }
         public double Tuition { get; set; }
         public string Instructor { get; set; }
+        public List<Section> Sections { get; set; }
 
         public Course(int id, string name, bool isOnline, double tuition, string instructor)
         {
@@ -20,6 +22,7 @@ namespace Academy.Domain
             IsOnline = isOnline;
             Tuition = tuition;
             Instructor = instructor;
+            Sections = new List<Section>();
         }
 
         private static void GuardAgainstInvalidName(string name)
@@ -32,6 +35,11 @@ namespace Academy.Domain
         {
             if (tuition <= 0)
                 throw new CourseTuitionIsInvalidException();
+        }
+
+        public void AddSection(Section section)
+        {
+            Sections.Add(section);
         }
     }
 }
