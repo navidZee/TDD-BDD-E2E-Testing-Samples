@@ -1,5 +1,6 @@
 using System;
 using Academy.Domain;
+using FluentAssertions;
 using Xunit;
 
 namespace Academy.Domain.Test
@@ -9,27 +10,64 @@ namespace Academy.Domain.Test
         [Fact]
         public void Constructor_ShouldConstructCourseProperly() // Happy path
         {
+            //Arreng
             const int id = 1;
             const string name = "TDD & BDD";
             const bool isOnline = true;
             const double tuition = 600;
+            const string instructor = "Navid Zare";
 
-            Course course = new Course(id, name, isOnline, tuition);
+            //Act
+            Course course = new Course(id, name, isOnline, tuition, instructor);
 
-            Assert.Equal(id, course.Id);
-            Assert.Equal(name, course.Name);
-            Assert.Equal(isOnline, course.IsOnline);
-            Assert.Equal(tuition, course.Tuition);
+            //Verify
+            course.Id.Should().Be(id);
+            course.Name.Should().Be(name);
+            course.IsOnline.Should().Be(isOnline);
+            course.Tuition.Should().Be(tuition);
+            course.Instructor.Should().Be(instructor);
+            course.Sections.Should().BeEmpty();
         }
 
-        [Theory]
-        [InlineData(1, "", true, 600)]
-        [InlineData(1, "TDD & BDD", true, 0)]
-        public void Constructor_ShouldThrowException(int id, string name, bool isOnline, double tuition)
-        {
-            void Course() => new Course(id, name, isOnline, tuition);
+        [Fact]
+        public void Constructor_ShouldThrowException_When_NameIsNotProvided()
+        { 
+            //Arrang
+            var courseBuilder = new CourseTestBuilder();
 
-            Assert.Throws<Exception>(Course);
+            //Act
+            Action course = () => courseBuilder.WithName(string.Empty).Build();
+
+            //Verify
+            course.Should().ThrowExactly<CourseNameIsInvalidException>();
+        }
+
+        [Fact]
+        public void Constructor_ShouldThrowException_When_TuitionIsNotProvided()
+        {
+            //Arrang
+            var courseBuilder = new CourseTestBuilder();
+
+            //Act
+            Action course = () => courseBuilder.WithTuition(0).Build();
+
+            //Verify
+            course.Should().ThrowExactly<CourseTuitionIsInvalidException>();
+        }
+
+        [Fact]
+        public void AddSection_ShouldAddNewSectionToSections_WhenIdAndNamePasses()
+        {
+            //Arrang
+            var courseBuilder = new CourseTestBuilder();
+            var course = courseBuilder.Build();
+            var sectionToAdd = SectionFactory.Create();
+
+            //Act
+            course.AddSection(sectionToAdd);
+
+            //Verify
+            course.Sections.Should().ContainEquivalentOf(sectionToAdd);
         }
     }
 }
