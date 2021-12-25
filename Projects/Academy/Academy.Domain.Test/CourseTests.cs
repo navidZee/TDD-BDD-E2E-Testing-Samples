@@ -5,8 +5,14 @@ using Xunit;
 
 namespace Academy.Domain.Test
 {
-    public class CourseTests
+    public class CourseTests : IDisposable
     {
+        private CourseTestBuilder _courseBuilder;
+        public CourseTests()
+        {
+            _courseBuilder = new CourseTestBuilder();
+        }
+
         [Fact]
         public void Constructor_ShouldConstructCourseProperly() // Happy path
         {
@@ -31,12 +37,9 @@ namespace Academy.Domain.Test
 
         [Fact]
         public void Constructor_ShouldThrowException_When_NameIsNotProvided()
-        { 
-            //Arrang
-            var courseBuilder = new CourseTestBuilder();
-
+        {
             //Act
-            Action course = () => courseBuilder.WithName(string.Empty).Build();
+            Action course = () => _courseBuilder.WithName(string.Empty).Build();
 
             //Verify
             course.Should().ThrowExactly<CourseNameIsInvalidException>();
@@ -45,11 +48,8 @@ namespace Academy.Domain.Test
         [Fact]
         public void Constructor_ShouldThrowException_When_TuitionIsNotProvided()
         {
-            //Arrang
-            var courseBuilder = new CourseTestBuilder();
-
             //Act
-            Action course = () => courseBuilder.WithTuition(0).Build();
+            Action course = () => _courseBuilder.WithTuition(0).Build();
 
             //Verify
             course.Should().ThrowExactly<CourseTuitionIsInvalidException>();
@@ -58,9 +58,8 @@ namespace Academy.Domain.Test
         [Fact]
         public void AddSection_ShouldAddNewSectionToSections_WhenIdAndNamePasses()
         {
-            //Arrang
-            var courseBuilder = new CourseTestBuilder();
-            var course = courseBuilder.Build();
+            //Arrange
+            var course = _courseBuilder.Build();
             var sectionToAdd = SectionFactory.Create();
 
             //Act
@@ -68,6 +67,11 @@ namespace Academy.Domain.Test
 
             //Verify
             course.Sections.Should().ContainEquivalentOf(sectionToAdd);
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }
